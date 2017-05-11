@@ -143,7 +143,10 @@ def main():
 
     list_apps = get_list_app()
 
-    if len(list_apps) == 0:
+    if "vmrun.exe" not in list_apps:
+        print "Vmware Workstation not installed on this PC"
+        return 0
+    elif len(list_apps) == 1:
         print "vm not found"
         return 0
 
