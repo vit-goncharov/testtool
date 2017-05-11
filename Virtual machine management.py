@@ -40,17 +40,29 @@ def define_programm():
                         path_apps = os.path.join(root, file_name)
                         list_programm[file_name] = path_apps
                         print "Found " + file_name + " in " + path_apps
+                    if file_name == 'vmrun.exe':
+                        path_apps = os.path.join(root, file_name)
+                        list_programm[file_name] = path_apps
 
     with open('vm_list.txt', 'w') as outfile:
         json.dump(list_programm, outfile)
     return list_programm
 
+def get_vmrun():
+    """
+    Get path to vmrun
+    """
+    with open('vm_list.txt', 'r') as infile:
+        list_apps = json.load(infile)
+        return list_apps["vmrun.exe"]
+
 def vm_mode(app, mode, hardsoft):
     """
     Call mode vmware start/stop/reset
     """
+    vmrun_path = get_vmrun()
     print mode + " vm"
-    subprocess.call(["C:\\Program Files (x86)\\VMware\\VMware Workstation\\vmrun.exe",
+    subprocess.call([vmrun_path,
                      "-T",
                      "ws",
                      mode,
@@ -62,8 +74,9 @@ def sleep_vm(vm_file, user="user", password="qwerty"):
     """
     sleep virtual machine func
     """
+    vmrun_path = get_vmrun()
     print "sleep vm"
-    subprocess.call(["C:\\Program Files (x86)\\VMware\\VMware Workstation\\vmrun.exe",
+    subprocess.call([vmrun_path,
                      "-T",
                      "ws",
                      "-gu",
@@ -103,9 +116,10 @@ def get_app(list_apps):
     numb_app = {}
     indx = 1
     for keys in sorted(list_apps):
-        numb_app[str(indx)] = keys
-        print "[" + str(indx) + "]" + " - " + keys
-        indx = indx + 1
+        if keys != "vmrun.exe":
+            numb_app[str(indx)] = keys
+            print "[" + str(indx) + "]" + " - " + keys
+            indx = indx + 1
 
     while True:
         numb = raw_input("Select an app in list above -> ")
