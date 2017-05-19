@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Automate define install virtual machine vmware
+Automate define install program
+Not supported Russian symbols in path
 """
 from __future__ import unicode_literals
 
@@ -201,5 +202,10 @@ def main():
         else:
             print "Invalid command, please try again"
 
-if __name__ == "__main__":
-    main()
+try:
+    if __name__ == "__main__":
+        main()
+except KeyboardInterrupt:
+    pass
+except EOFError:
+    pass
