@@ -1,13 +1,18 @@
+# -*- coding: utf-8 -*-
 """
-Automate define install program
+Automate define install virtual machine vmware
 """
+from __future__ import unicode_literals
+
+import json
 import os
 import os.path
-import subprocess
-import time
 import string
-import json
+import subprocess
+import sys
+import time
 from ctypes import windll
+
 
 def get_drives():
     """
@@ -132,12 +137,16 @@ def get_app(list_apps):
                 print "Invalid name apps, try again"
         else:
             print "Intalid value, please try again"
-    return app
+    return app.encode('utf-8')
 
 def main():
     """
     General functions
     """
+    reload(sys)
+    encoding = sys.getfilesystemencoding()
+    sys.setdefaultencoding(encoding)
+
     commands = ["start", "stop", "suspend", "reset"]
     mods_command = ["hard", "soft", "gui", "nogui"]
 
