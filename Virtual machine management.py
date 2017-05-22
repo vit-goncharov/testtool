@@ -56,7 +56,7 @@ def define_programm():
 
 def get_vmrun():
     """
-    Get path to vmrun
+    Get path to vmrun, extract this patch from file, json format, on current directory
     """
     with open('vm_list.txt', 'r') as infile:
         list_apps = json.load(infile)
@@ -202,10 +202,15 @@ def main():
         else:
             print "Invalid command, please try again"
 
-try:
-    if __name__ == "__main__":
+if __name__ == "__main__":
+    try:
         main()
-except KeyboardInterrupt:
-    pass
-except EOFError:
-    pass
+    except KeyboardInterrupt:
+        pass
+    except EOFError:
+        pass
+    finally:
+        try:
+            print "Exit programm"
+        except KeyboardInterrupt:
+            print "Exit programm"
