@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Automate define install program
-Not supported Russian symbols in path
 """
 from __future__ import unicode_literals
 
@@ -14,6 +13,23 @@ import sys
 import time
 from ctypes import windll
 
+def progress(count, step=4000, suffix=''):
+    """
+    Process bar Loading... get value and step(delay betweew appearance point)\n
+    Get invalid count, 4000 < count < 12000. filled_len - current point. print in console
+    """
+    bar_len = 3
+
+    if count > step * bar_len:
+        num = count // (step * bar_len)
+        count = (step * bar_len) - ((num + 1) * (step * bar_len) - count)
+
+    filled_len = (count // step) + 1
+
+    status_bar = '.' * filled_len + ' ' * (bar_len - filled_len)
+
+    sys.stdout.write('Loading%s %s\r' % (status_bar, suffix))
+    sys.stdout.flush()
 
 def get_drives():
     """
@@ -35,6 +51,7 @@ def define_programm():
     Exist file in curent dir with dict vm:path\n
     Return dict vm:path
     """
+    count = 0
     list_programm = {}
     device = get_drives()
     print "Found Logical Drive " + str(device)
@@ -49,9 +66,12 @@ def define_programm():
                     if file_name == 'vmrun.exe':
                         path_apps = os.path.join(root, file_name)
                         list_programm[file_name] = path_apps
+                    progress(count)
+                    count = count + 1
 
     with open('vm_list.txt', 'w') as outfile:
         json.dump(list_programm, outfile)
+    print "Search completed successfully"
     return list_programm
 
 def get_vmrun():
